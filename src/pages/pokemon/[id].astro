@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const { id } = Astro.params;
+
+const reqUrl = `https://pokeapi.co/api/v2/pokemon/${id}`;
+const response = await fetch(reqUrl);
+const data = await response.json();
+
+console.log(data);
+
+---
+<Layout title={data.name}>
+  <section class="page-wrapper">
+
+    <!-- Navigation (example placeholders, replace with real logic if needed) -->
+    <div class="nav-buttons">
+      {data.id > 1 && <a href={`/pokemon/${data.id - 1}`} class="action-button">Previous</a>}
+      <a href={`/pokemon/${data.id + 1}`} class="action-button">Next</a>
+    </div>
+
+    <div class="card">
+      <!-- Name and ID -->
+      <h1 class="pokemon-name">{data.name}</h1>
+      <p class="pokemon-id">Pokedex number: {data.id}</p>
+
+      <!-- Images -->
+      <div class="image-section">
+        <img src={data.sprites.front_default} alt={`${data.name} front`} class="pokemon-image" />
+        <img src={data.sprites.front_shiny} alt={`${data.name} shiny`} class="pokemon-image" />
+      </div>
+
+      <!-- Info -->
+      <div class="info-section">
+        <p>Type: {data.types.map(typeInfo => typeInfo.type.name).join(', ')}</p>
+        <p>Weight: {data.weight}</p>
+        <p>Base experience: {data.base_experience}</p>
+        <p>Abilities: {data.abilities.map(abilityInfo => abilityInfo.ability.name).join(', ')}</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        {data.stats.map(statInfo => (
+          <p class="stat-line">{statInfo.stat.name}: {statInfo.base_stat}</p>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  margin: auto;
+}
+
+.card {
+  width: 100%;
+  max-width: 800px;
+  padding: 8px;
+  margin: 20px;
+  background-color: rgb(0, 0, 0, .4);
+  color: white;
+}
+
+.pokemon-name {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 16px;
+  color: #ffffff;
+  word-break: break-word;
+}
+
+.pokemon-id {
+  text-align: center;
+}
+
+.image-section {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.pokemon-image {
+  width: 45%;
+  max-width: 200px;
+}
+
+.info-section {
+  margin-top: 1rem;
+  text-align: center;
+
+}
+
+.stats {
+  margin-top: 1rem;
+}
+
+.stat-line {
+  text-align: center;
+}
+
+.nav-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(14deg, blue 0%, #01afff 100%);
+    color: white;
+}
+</style>

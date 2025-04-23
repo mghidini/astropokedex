@@ -1,0 +1,64 @@
+---
+
+const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=50');
+const jsonResponse = await response.json();
+const results = jsonResponse.results;
+console.log(results);
+
+const title = "My Pokedex";
+
+---
+
+<section id="hero">
+    <h1>
+      Gotta fetch 'em all!
+    </h1>
+    <ul>
+      {results.map((pokemon: any) => (
+        <li class="pokemon-card">
+          <a href={`/pokemon/${pokemon.name}`}>
+            {pokemon.name.toUpperCase()}
+          </a>
+        </li>
+      ))}
+    </ul> 
+  </section>
+
+<style>
+ul {
+    list-style-type: none;
+    align-items: center;
+}
+
+li {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin: 20px;
+}
+
+.pokemon-card {
+    display: block;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pokemon-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(14deg, blue 0%, #01afff 100%);
+    color: white;
+}
+
+#hero {
+  height: fit-content;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+</style>
